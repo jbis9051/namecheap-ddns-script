@@ -4,27 +4,32 @@ CURRENTIP=$(<current.txt)
 IP1=$(dig +short myip.opendns.com @resolver1.opendns.com)
 IP2=$(curl -s https://ipinfo.io/ip)
 
+error() {
+    echo "$(date) - $1" >&2
+}
+
+
 if [[ -z "$PASS" ]]
 then
-  echo "PASS not set!" >&2
+  error "PASS not set!"
   exit 1;
 fi
 
 if [[ -z "$DOMAIN" ]]
 then
-  echo "DOMAIN not set!" >&2
+  error "DOMAIN not set!"
   exit 1;
 fi
 
 if [[ "$IP1" != "$IP2" ]]
 then
-  echo "IP did not match!" >&2
+  error "IP did not match!"
   exit 1;
 fi
 
 if [[ "$IP1" == "$CURRENTIP" ]]
 then
-  echo "IP did not change!" >&2
+  error "IP did not change!"
   exit 0;
 fi
 
